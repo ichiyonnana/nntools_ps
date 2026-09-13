@@ -18,6 +18,10 @@ if (fore_brightness > back_brightness) {
 }
 
 // 乗算色の計算
+var base_color = new SolidColor();
+base_color.model = ColorModel.RGB;
+base_color.rgb = light_color;
+
 var mul_color = new SolidColor();
 mul_color.model = ColorModel.RGB;
 mul_color.rgb.red = Math.min(1.0, dark_color.red / light_color.red) * 255;
@@ -25,4 +29,5 @@ mul_color.rgb.green = Math.min(1.0, dark_color.green / light_color.green) * 255;
 mul_color.rgb.blue = Math.min(1.0, dark_color.blue / light_color.blue) * 255;
 
 // 描画色に設定
+app.backgroundColor = base_color;
 app.foregroundColor = mul_color;
