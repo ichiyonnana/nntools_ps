@@ -1,4 +1,5 @@
-// Photoshop ExtendScript: 最上位にあるレイヤーグループの表示・非表示を切り替える
+#target photoshop
+// 最上位にあるレイヤーグループの表示・非表示を切り替える
 
 if (app.documents.length === 0) {
     // ドキュメントが開かれていない場合は何もしない
