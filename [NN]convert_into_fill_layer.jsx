@@ -4,6 +4,9 @@
 // レイヤー名に含まれるカラーコードのパターン
 var COLOR_CODE_PATTERN = /#([0-9A-Fa-f]{6})/;
 
+// 通過から通常へ変更したかどうか
+var passThroughConverted = false;
+
 function sid(s) {
     return stringIDToTypeID(s);
 }
@@ -50,14 +53,6 @@ function getColorFromName(name) {
     color.rgb.red = parseInt(hex.substr(0, 2), 16);
     color.rgb.green = parseInt(hex.substr(2, 2), 16);
     color.rgb.blue = parseInt(hex.substr(4, 2), 16);
-    return color;
-}
-
-function makeBlack() {
-    var color = new SolidColor();
-    color.rgb.red = 0;
-    color.rgb.green = 0;
-    color.rgb.blue = 0;
     return color;
 }
 
@@ -120,7 +115,14 @@ function convertIntoFillLayer() {
     var opacity = sourceLayer.opacity;
     var blendMode = sourceLayer.blendMode;
 
-    // 色はレイヤー名のカラーコードを最優先、次にレイヤー自身の単色、どちらも無ければ黒
+    // 通過モードだった場合の警告フラグ
+    passThroughConverted = blendMode == BlendMode.PASSTHROUGH;
+
+    if (passThroughConverted) {
+        blendMode = BlendMode.NORMAL;
+    }
+
+    // 色はレイヤー名のカラーコードを最優先、次にレイヤー自身の単色、どちらも無ければ描画色
     var color = getColorFromName(name);
 
     if (!color) {
@@ -128,7 +130,7 @@ function convertIntoFillLayer() {
     }
 
     if (!color) {
-        color = makeBlack();
+        color = app.foregroundColor;
     }
 
     // 結合結果に合成設定が焼き込まれないよう通常・100% にする
@@ -160,4 +162,8 @@ if (app.documents.length === 0) {
 } else {
     // ヒストリーを一つにまとめる
     app.activeDocument.suspendHistory("Convert Into Fill Layer", "convertIntoFillLayer()");
+
+    if (passThroughConverted) {
+        alert("描画モードが「通過」だったため「通常」に変更しました。\n見た目が維持されているか確認してください。");
+    }
 }
