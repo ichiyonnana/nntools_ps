@@ -1,0 +1,23 @@
+{
+  "manifestVersion": 5,
+  "id": "com.ichiyonnana.spread-blur",
+  "name": "拡散ぼかし",
+  "version": "1.0.0",
+  "main": "index.html",
+  "host": {
+    "app": "PS",
+    "minVersion": "24.2.0"
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "spreadBlurPanel",
+      "label": {
+        "default": "拡散ぼかし"
+      },
+      "minimumSize": { "width": 250, "height": 300 },
+      "preferredDockedSize": { "width": 260, "height": 320 },
+      "preferredFloatingSize": { "width": 260, "height": 320 }
+    }
+  ]
+}
